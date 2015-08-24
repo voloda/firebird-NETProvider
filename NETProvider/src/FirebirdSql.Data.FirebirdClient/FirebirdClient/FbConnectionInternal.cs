@@ -535,34 +535,10 @@ namespace FirebirdSql.Data.FirebirdClient
 		private string GetProcessName()
 		{
 			// showing ApplicationPhysicalPath may be wrong because of connection pooling; better idea?
-			return GetHostingPath() ?? GetRealProcessName();
+			return GetRealProcessName();
 		}
 
 
-		private string GetHostingPath()
-		{
-			System.Reflection.Assembly assembly;
-			try
-			{
-				assembly = System.Reflection.Assembly.Load(string.Format("System.Web, Version={0}.{1}.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", Environment.Version.Major, Environment.Version.Minor));
-			}
-			catch (FileNotFoundException)
-			{
-				return null;
-			}
-			catch (FileLoadException)
-			{
-				return null;
-			}
-			catch (BadImageFormatException)
-			{
-				return null;
-			}
-			return (string)assembly
-				.GetType("System.Web.Hosting.HostingEnvironment")
-				.GetProperty("ApplicationPhysicalPath")
-				.GetValue(null, null);
-		}
 		private string GetRealProcessName()
 		{
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetEntryAssembly();
